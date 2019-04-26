@@ -127,16 +127,20 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\..\Documents\OpenGL Stuff\glad.c" />
     <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="GLWindow.cpp" />
+    <ClCompile Include="Transform.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\..\Documents\OpenGL Stuff\Libraries\stb_image.h" />
+    <ClInclude Include="Matrix4.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="GLWindow.h" />
+    <ClInclude Include="Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGL-Demo.rc" />

@@ -27,9 +27,9 @@ GLWindow::~GLWindow()
 	glfwTerminate();
 }
 
-// glfw window creation
 void GLWindow::CreateGLWindow(const unsigned int width, const unsigned int height)
 {
+	// glfw window creation
 	window = glfwCreateWindow(width, width, "OpenGL-Demo", NULL, NULL);
 	if (window == NULL)
 	{
