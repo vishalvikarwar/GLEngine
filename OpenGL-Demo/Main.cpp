@@ -4,6 +4,10 @@
 #include "GLWindow.h"
 #include "Shader.h"
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 
 // settings
 const unsigned int SCR_WIDTH = 800;
@@ -18,9 +22,8 @@ int main()
 	// build and compile our shader program
 	// ------------------------------------
 	// vertex shader
-	Shader ourShader("C:/Users/user/Documents/OpenGL Stuff/Res/shader.vert",
-		"C:/Users/user/Documents/OpenGL Stuff/Res/shader.frag");
-
+	Shader* ourShader = new Shader("./Shaders/shader.vert",
+		"./Shaders/shader.frag");
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	float vertices[] = {
@@ -66,17 +69,19 @@ int main()
 	unsigned int texture;
 	glGenTextures(1, &texture);
 	glBindTexture(GL_TEXTURE_2D, texture);
+
 	// set the texture wrapping/filtering options (on the currently bound texture object)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	// load and generate the texture
 	int width, height, nrChannels;
-	unsigned char *data = stbi_load("C:/Users/user/Documents/OpenGL Stuff/Res/container.jpg", &width, &height, &nrChannels, 0);
+	stbi_set_flip_vertically_on_load(true);
+	unsigned char *data = stbi_load("./Images/awesomeface.png", &width, &height, &nrChannels, 0);
 	if (data)
 	{
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 	}
 	else
@@ -85,6 +90,17 @@ int main()
 	}
 	stbi_image_free(data);
 
+
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::rotate(model, glm::radians(-55.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+
+	glm::mat4 view;
+	// note that we’re translating the scene in the reverse direction of where we want to move
+	view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+	glm::mat4 projection;
+	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / SCR_HEIGHT, 0.1f,
+		100.0f);
 
 	// uncomment this call to draw in wireframe polygons.
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -103,9 +119,16 @@ int main()
 		glClear(GL_COLOR_BUFFER_BIT);
 
 		// draw our first triangle
-		glBindTexture(GL_TEXTURE_2D, texture);
-		ourShader.use();
+		//glBindTexture(GL_TEXTURE_2D, texture);
+		ourShader->use();
 
+		unsigned int modelLoc = glGetUniformLocation(ourShader->ID, "model");
+		unsigned int viewLoc = glGetUniformLocation(ourShader->ID, "view");
+		unsigned int projLoc = glGetUniformLocation(ourShader->ID, "projection");
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, &view[0][0]);
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 		glBindVertexArray(VAO);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);

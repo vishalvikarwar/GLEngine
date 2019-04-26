@@ -125,7 +125,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Documents\OpenGL Stuff\glad.c" />
+    <ClCompile Include="External\glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Matrix4.cpp" />
     <ClCompile Include="Shader.cpp" />
@@ -144,10 +144,6 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="OpenGL-Demo.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="..\..\..\..\Documents\OpenGL Stuff\Res\container.jpg" />
-    <Image Include="..\..\..\..\Documents\OpenGL Stuff\Res\wall.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\Documents\OpenGL Stuff\Res\shader.frag" />

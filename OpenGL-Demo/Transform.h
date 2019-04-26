@@ -11,6 +11,7 @@ private:
 	glm::vec3 position;
 	glm::vec3 rotation;
 	glm::vec3 scale;
+
 public:
 	Transform();
 	~Transform();
